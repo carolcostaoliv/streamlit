@@ -16,17 +16,22 @@ class View:
         cliente = Cliente(id, "", "", "")
         ClienteDAO.excluir(cliente)
 
+    @staticmethod
+    def Servico_inserir(descricao, valor):
+        servico = Servico(0, descricao, valor) 
+        ServicoDAO.inserir(servico)
+
+    @staticmethod
     def servicos_listar():
         return ServicoDAO.listar()
     
-    def Servico_inserir(nome, email):
-        servico = Servico(0, nome, email)
-        Servico.inserir(servico)
-
-    def servico_atualizar(id, nome, email):
-        servico = Servico(id, nome, email)
+    @staticmethod
+    def servico_atualizar(id, descricao, valor):
+        servico = Servico(id, descricao, valor)
         ServicoDAO.atualizar(servico)
 
-    def servico_excluir(id):
-        ServicoDAO.excluir(id)
-
+    @staticmethod
+    def Servico_excluir(id):
+        servico = ServicoDAO.listar_id(id)
+        if servico:
+            ServicoDAO.excluir(servico)
