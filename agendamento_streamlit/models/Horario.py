@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 class Horario:
     def __init__(self, id, data):
-        self.__id(id)
+        self.__id = id
         self.__data(data)
         self.__confirmado(False)
         self.__id_cliente(0)
