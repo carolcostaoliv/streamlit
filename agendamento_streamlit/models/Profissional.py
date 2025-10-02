@@ -1,6 +1,6 @@
 import json
 
-class Cliente:
+class Profissional:
 
     def __init__(self, id, nome, especialidade, conselho):
         self.__id = id
@@ -21,13 +21,13 @@ class Cliente:
         return self.__nome
 
     def set_especialidade(self, especialidade):
-        if especialidade =="": raise ValueError ("E-mail inválido")
+        if especialidade =="": raise ValueError ("Especialidade inválida")
         self.__especialidade = especialidade
     def get_especialidade(self):
         return self.__especialidade
 
     def set_conselho(self, conselho):
-        if conselho == "": raise ValueError ("Teleconselho inválido")
+        if conselho == "": raise ValueError ("Conselho inválido")
         self.__conselho = conselho
     def get_conselho(self):
         return self.__conselho
@@ -42,11 +42,11 @@ class Cliente:
 
     @staticmethod
     def from_json(dic):
-        return Cliente(dic["id"], dic["nome"], dic["especialidade"], dic["conselho"])
+        return Profissional(dic["id"], dic["nome"], dic["especialidade"], dic["conselho"])
 
 import json
 
-class ClienteDAO:
+class ProfissionalDAO:
     __objetos = []
     @classmethod
     def inserir(cls, obj):
@@ -90,15 +90,15 @@ class ClienteDAO:
     def abrir(cls):
         cls.__objetos = []
         try: 
-            with open("clientes.json", mode="r") as arquivo: 
+            with open("Profissional.json", mode="r") as arquivo: 
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
-                    obj = Cliente.from_json(dic)
+                    obj = Profissional.from_json(dic)
                     cls.__objetos.append(obj)
         except FileNotFoundError:
             pass
 
     @classmethod
     def salvar(cls):
-        with open("clientes.json", mode="w") as arquivo:
-            json.dump(cls.__objetos, arquivo, default = Cliente.to_json)
+        with open("Profissional.json", mode="w") as arquivo:
+            json.dump(cls.__objetos, arquivo, default = Profissional.to_json)
