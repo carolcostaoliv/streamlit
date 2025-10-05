@@ -23,7 +23,7 @@ class Horario:
     def set_confirmado(self, confirmado): self.__confirmado = confirmado
     def set_id_cliente(self, id_cliente): self.__id_cliente = id_cliente
     def set_id_servico(self, id_servico): self.__id_servico = id_servico
-    def set_id_proficinal(self, id_profissional): self.__id_profissional = id_profissional
+    def set_id_profissional(self, id_profissional): self.__id_profissional = id_profissional
 
     def to_json(self):
         dic = {"id":self.__id, "data":self.__data.strftime("%d/%m/%Y %H:%M"),
