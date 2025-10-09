@@ -2,11 +2,13 @@ import json
 
 class Profissional:
 
-    def __init__(self, id, nome, especialidade, conselho):
+    def __init__(self, id, nome, especialidade, conselho, email, senha):
         self.__id = id
         self.__nome = nome
         self.__especialidade = especialidade
         self.__conselho = conselho
+        self.__email = email
+        self.__senha = senha
 
     def set_id(self, id):
         if id < 0: raise ValueError ("ID inválido")
@@ -31,18 +33,30 @@ class Profissional:
         self.__conselho = conselho
     def get_conselho(self):
         return self.__conselho
+    
+    def set_email(self, email):
+        if email == "": raise ValueError('Email inválido')
+        self.__email = email
+    def get_email(self):
+        return self.__email
+    
+    def set_senha(self, senha):
+        if senha == "": raise ValueError('Senha inválida')
+        self.__senha = senha
+    def get_senha(self):
+        return self.__senha
 
 
     def __str__(self):
         return f"{self.__id} - {self.__nome} | {self.__especialidade} | {self.__conselho}"
 
     def to_json(self):
-        dic = {"id":self.__id, "nome":self.__nome,"especialidade":self.__especialidade, "conselho":self.__conselho}
+        dic = {"id":self.__id, "nome":self.__nome,"especialidade":self.__especialidade, "conselho":self.__conselho, "email": self.__email, "senha": self.__senha}
         return dic
 
     @staticmethod
     def from_json(dic):
-        return Profissional(dic["id"], dic["nome"], dic["especialidade"], dic["conselho"])
+        return Profissional(dic["id"], dic["nome"], dic["especialidade"], dic["conselho"], dic["email"], dic["senha"])
 
 import json
 
