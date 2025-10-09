@@ -11,6 +11,7 @@ class LoginUI:
             c = View.cliente_autenticar(email, senha)
             if c == None: st.write("E-mail ou senha inválidos")
             else:
+                st.session_state["usuario_tipo"] = "cliente"
                 st.session_state["usuario_id"] = c["id"]
                 st.session_state["usuario_nome"] = c["nome"]
                 st.rerun()
