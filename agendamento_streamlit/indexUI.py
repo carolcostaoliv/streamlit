@@ -6,17 +6,25 @@ from templates.abrircontaUI import AbrirContaUI
 from templates.loginUI import LoginUI
 from templates.perfilclienteUI import PerfilClienteUI
 from templates.perfilprofissionalUI import PerfilProfissionalUI
+from templates.veragendaUI import VerAgendaUI
+from templates.verservicoUI import VerServicoUI
+from templates.abriragendaUI import AbrirAgendaUI
+from templates.agendarservicoUI import AgendarServicoUI
+from templates.confirmarservicoUI import ConfirmarServicoUI
+from templates.alterarsenhaUI import AlterarSenhaUI
 from view import View
 import streamlit as st
 
 class IndexUI:
 
     def menu_admin():            
-        op = st.sidebar.selectbox("Menu", ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais"])
+        op = st.sidebar.selectbox("Menu", ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais", "Alterar Senha"])
         if op == "Cadastro de Clientes": ManterClienteUI.main()
         if op == "Cadastro de Serviços": ManterServicoUI.main()
         if op == "Cadastro de Horários": ManterHorarioUI.main()
         if op == "Cadastro de Profissionais": ManterProfissionalUI.main()
+        if op == "Alterar Senha": AlterarSenhaUI.main()
+
 
     def menu_visitante():
         op = st.sidebar.selectbox("Menu", ["Entrar no Sistema", "Abrir Conta"])
@@ -24,12 +32,20 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"])
-        if op == "Meus Dados": PerfilProfissionalUI.main()
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço"])
+        if op == "Meus Dados":
+            PerfilClienteUI.main()
+        if op == "Agendar Serviço":
+            AgendarServicoUI.main()
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Meus Serviços", "Confirmar Serviço"])
         if op == "Meus Dados": PerfilProfissionalUI.main()
+        if op == "Abrir Minha Agenda": AbrirAgendaUI.main()
+        if op == "Minha Agenda": VerAgendaUI.main()
+        if op == "Meus Serviços": VerServicoUI.main()
+        if op == "Confirmar Serviço": ConfirmarServicoUI.main()
+
 
     def menu_admin():
         op = st.sidebar.selectbox("Menu", ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais"])

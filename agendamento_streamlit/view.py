@@ -63,6 +63,38 @@ class View:
         c = Horario(id, None)
         HorarioDAO.excluir(c)
 
+    def horario_filtrar_profissional(id_profissional):
+        r=[]
+        for h in View.horario_listar():
+            if h.get_id_profissional() == id_profissional: 
+                r.append(h)
+        return r
+    
+    def horario_filtrar_cliente(id_cliente):
+            r=[]
+            for h in View.horario_listar():
+                if h.get_id_cliente() == id_cliente:
+                    r.append(h)
+            return r
+
+    def horario_agendar_horario(id_profissional):
+        r=[]
+        agora = datetime.now()
+        for h in View.horario_listar():
+            if h.get_data() >= agora and h.get_confirmado() == False and h.get_id_cliente() == None and h.get_id_profissional() == id_profissional:
+                r.append(h)
+        r.sort(key= lambda h :h.get_data())
+        return r
+    
+    def horario_listar_nao_confirmados(id_profissional):
+        r = []
+        agora = datetime.now()
+        for h in View.horario_listar():
+            if h.get_id_profissional() == id_profissional and h.get_id_cliente() is not None and h.get_confirmado() == False:                      
+                r.append(h)
+        r.sort(key=lambda x: x.get_data())
+        return r
+
     def profissional_listar():
         return ProfissionalDAO.listar()
     
