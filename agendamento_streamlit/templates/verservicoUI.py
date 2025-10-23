@@ -12,7 +12,7 @@ class VerServicoUI:
             
         id_cliente_logado = st.session_state["usuario_id"]
         meus_agendamentos = View.horario_filtrar_cliente(id_cliente_logado)
-
+        
         if len(meus_agendamentos) == 0:
             st.info("Você ainda não possui serviços agendados.")
             return
