@@ -32,18 +32,20 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços"])
         if op == "Meus Dados":
             PerfilClienteUI.main()
         if op == "Agendar Serviço":
             AgendarServicoUI.main()
+        if op == "Meus Serviços": 
+            VerServicoUI.main()
+        
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Meus Serviços", "Confirmar Serviço"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Confirmar Serviço"])
         if op == "Meus Dados": PerfilProfissionalUI.main()
         if op == "Abrir Minha Agenda": AbrirAgendaUI.main()
         if op == "Minha Agenda": VerAgendaUI.main()
-        if op == "Meus Serviços": VerServicoUI.main()
         if op == "Confirmar Serviço": ConfirmarServicoUI.main()
 
 

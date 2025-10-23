@@ -7,15 +7,14 @@ class VerServicoUI:
         st.header("Meus Serviços")
         
         if "usuario_id" not in st.session_state:
-            st.error("Usuário não está logado ou não foi cadastrado como profissional.")
+            st.error("Você precisa estar logado para ver seus serviços.")
             return
             
-        id_profissional_logado = st.session_state["usuario_id"]
-        horarios_do_profissional = View.horario_filtrar_profissional(id_profissional_logado)
-        meus_agendamentos = [h for h in horarios_do_profissional if h.get_id_cliente() is not None and h.get_id_cliente() != 0]
+        id_cliente_logado = st.session_state["usuario_id"]
+        meus_agendamentos = View.horario_filtrar_cliente(id_cliente_logado)
 
         if len(meus_agendamentos) == 0:
-            st.info("Nenhum serviço agendado em sua agenda.")
+            st.info("Você ainda não possui serviços agendados.")
             return
             
         lista_formatada = []
@@ -26,18 +25,18 @@ class VerServicoUI:
                 if servico:
                     servico_nome = servico.get_descricao()
             
-            cliente_nome = "Cliente Não Encontrado"
-            cliente_id = h.get_id_cliente()
-            if cliente_id is not None and cliente_id != 0:
-                cliente = View.cliente_listar_id(cliente_id)
-                if cliente:
-                    cliente_nome = cliente.get_nome()
+            profissional_nome = "Profissional Não Encontrado"
+            profissional_id = h.get_id_profissional()
+            if profissional_id is not None and profissional_id != 0:
+                profissional = View.profissional_listar_id(profissional_id) 
+                if profissional:
+                    profissional_nome = profissional.get_nome()
 
             lista_formatada.append({
                 "Data": h.get_data().strftime("%d/%m/%Y %H:%M"), 
                 "Status": h.get_confirmado(),
                 "Serviço": servico_nome, 
-                "Cliente": cliente_nome,
+                "Profissional": profissional_nome, 
             })
             
         if len(lista_formatada) > 0:
@@ -53,7 +52,7 @@ class VerServicoUI:
                         default=False,
                         disabled=True 
                     ),
-                    "Data": st.column_config.DatetimeColumn("Data")
+                    "Data": st.column_config.DatetimeColumn("Data", format="DD/MM/YYYY HH:mm")
                 }
             ) 
         else:
