@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 class Servico:
     def __init__(self, id, descricao, valor):
         self.set_id(id)
@@ -42,7 +43,7 @@ class Servico:
             dic['valor'],
         )
     
-import json
+
 class ServicoDAO:
     __objetos = []
 

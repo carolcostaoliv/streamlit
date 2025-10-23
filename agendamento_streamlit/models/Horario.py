@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 class Horario:
     def __init__(self, id, data):
         self.set_id(id)
@@ -40,7 +41,7 @@ class Horario:
         horario.set_id_profissional(dic["id_profissional"])
         return horario
     
-import json
+
 class HorarioDAO:
     __objetos = []
 
