@@ -5,8 +5,8 @@ class Horario:
         self.set_id(id)
         self.set_data(data)
         self.set_confirmado(False)
-        self.set_id_cliente(0)
-        self.set_id_servico(0)
+        self.set_id_cliente(None)
+        self.set_id_servico(None)
         self.set_id_profissional(0)
 
     def __str__(self):
