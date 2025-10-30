@@ -2,15 +2,15 @@ from datetime import datetime
 import json
 class Horario:
     def __init__(self, id, data):
-        self.set_id(id)
-        self.set_data(data)
-        self.set_confirmado(False)
-        self.set_id_cliente(None)
-        self.set_id_servico(None)
-        self.set_id_profissional(0)
+        self.__id = id
+        self.set_data(data) 
+        self.__confirmado = False
+        self.__id_cliente = None
+        self.__id_servico = None
+        self.__id_profissional = None
 
     def __str__(self):
-        return f"ID - {self.__id} | DATA - {self.__data.strftime('%d/%m/%Y %H:%M')} | CONFIRMAÇÃO - {self.__confirmado}"
+        return f"ID - {self.__id} | DATA - {self.get_data().strftime('%d/%m/%Y %H:%M')} | CONFIRMAÇÃO - {self.__confirmado}"
     
     def get_id(self): return self.__id
     def get_data(self): return self.__data
@@ -20,7 +20,12 @@ class Horario:
     def get_id_profissional(self): return self.__id_profissional
 
     def set_id(self, id): self.__id = id
-    def set_data(self, data): self.__data = data
+    
+    def set_data(self, data):
+        if data.year < 2025:
+             raise ValueError(f"Não é permitido cadastrar horários com data anterior a 2025 (data informada: {data.year})")
+        self.__data = data
+        
     def set_confirmado(self, confirmado): self.__confirmado = confirmado
     def set_id_cliente(self, id_cliente): self.__id_cliente = id_cliente
     def set_id_servico(self, id_servico): self.__id_servico = id_servico
@@ -28,17 +33,18 @@ class Horario:
 
     def to_json(self):
         dic = {"id":self.__id, "data":self.__data.strftime("%d/%m/%Y %H:%M"),
-            "confirmado":self.__confirmado, "id_cliente":self.__id_cliente,
-            "id_servico":self.__id_servico, "id_profissional": self.__id_profissional}
+               "confirmado":self.__confirmado, "id_cliente":self.__id_cliente,
+               "id_servico":self.__id_servico, "id_profissional": self.__id_profissional}
         return dic
 
     @staticmethod
     def from_json(dic):
         horario = Horario(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"))
-        horario.set_confirmado(dic["confirmado"])
-        horario.set_id_cliente(dic["id_cliente"])
-        horario.set_id_servico(dic["id_servico"])
-        horario.set_id_profissional(dic["id_profissional"])
+        
+        horario.set_confirmado(dic.get("confirmado", False))
+        horario.set_id_cliente(dic.get("id_cliente", None))
+        horario.set_id_servico(dic.get("id_servico", None))
+        horario.set_id_profissional(dic.get("id_profissional", None))
         return horario
     
 
@@ -89,12 +95,14 @@ class HorarioDAO:
             with open("horarios.json", mode ="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
-                    obj = Horario.from_json(dic)
+                    obj = Horario.from_json(dic) 
                     cls.__objetos.append(obj)
         except FileNotFoundError:
+            pass
+        except json.JSONDecodeError: 
             pass
 
     @classmethod
     def salvar(cls):
         with open("horarios.json", mode ="w") as arquivo:
-            json.dump(cls.__objetos, arquivo, default = Horario.to_json)
+            json.dump(cls.__objetos, arquivo, default = Horario.to_json, indent=4) 
