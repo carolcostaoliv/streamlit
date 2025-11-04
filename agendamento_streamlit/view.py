@@ -1,18 +1,17 @@
-from models.Cliente import Cliente, ClienteDAO
-from models.Servico import Servico, ServicoDAO
-from models.Horario import Horario, HorarioDAO
-from models.Profissional import Profissional, ProfissionalDAO
-from datetime import datetime 
+from models.Cliente import Cliente
+from models.Cliente import ClienteDAO
+from models.Servico import Servico
+from models.Servico import ServicoDAO
+from models.Horario import Horario
+from models.Horario import HorarioDAO
+from models.Profissional import Profissional
+from models.Profissional import ProfissionalDAO
+from datetime import datetime
 
 class View:
 
     @classmethod
     def _validar_email(cls, email, obj_id=None, obj_type=None):
-        """
-        Valida se o email é 'admin' ou se já está em uso.
-        obj_id e obj_type são usados para ignorar o próprio objeto
-        durante uma operação de 'atualizar'.
-        """
         if email == "admin":
             raise ValueError("O e-mail 'admin' é reservado para o administrador")
 
@@ -34,13 +33,13 @@ class View:
     def cliente_listar_id(id):
         return ClienteDAO.listar_id(id)
     
-    def cliente_inserir(nome, email, fone, senha):
-        cliente = Cliente(0, nome, email, fone, senha) 
-        View._validar_email(email) 
-        ClienteDAO.inserir(cliente)
+    def cliente_inserir(nome, email, fone, senha, observacoes):
+            cliente = Cliente(0, nome, email, fone, senha, observacoes) 
+            View._validar_email(email) 
+            ClienteDAO.inserir(cliente)
 
-    def cliente_atualizar(id, nome, email, fone, senha):
-        cliente = Cliente(id, nome, email, fone, senha)
+    def cliente_atualizar(id, nome, email, fone, senha, observacoes):
+        cliente = Cliente(id, nome, email, fone, senha, observacoes)
         View._validar_email(email, id, 'cliente') 
         ClienteDAO.atualizar(cliente)
         
@@ -51,7 +50,7 @@ class View:
         agendamentos = View.horario_filtrar_cliente(id)   
         if len(agendamentos) > 0:
             raise ValueError("Não é possível excluir um cliente que possui agendamentos marcados")
-        obj_cliente = Cliente(id, "", "", "", "") 
+        obj_cliente = Cliente(id, "", "", "", "", "") 
         ClienteDAO.excluir(obj_cliente)
 
     def servico_listar():
@@ -178,13 +177,13 @@ class View:
         ProfissionalDAO.excluir(profissional)
 
     def cliente_criar_admin():
-        try:
-            for c in View.cliente_listar():
-                if c.get_email() == "admin": return 
-            admin = Cliente(0, "admin", "admin", "fone", "1234")
-            ClienteDAO.inserir(admin) # Chamando o DAO diretamente
-        except ValueError:
-            pass 
+            try:
+                for c in View.cliente_listar():
+                    if c.get_email() == "admin": return 
+                admin = Cliente(0, "admin", "admin", "fone", "1234", "") 
+                ClienteDAO.inserir(admin)
+            except ValueError:
+                pass  
             
     def cliente_autenticar (email, senha):
         for c in View.cliente_listar():
@@ -197,3 +196,4 @@ class View:
             if c.get_email() == email and c.get_senha() == senha:
                 return{"id": c.get_id(), "nome": c.get_nome()}
         return None
+    
