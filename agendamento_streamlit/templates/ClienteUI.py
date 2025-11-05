@@ -15,21 +15,25 @@ class ManterClienteUI:
 
     def listar():
         clientes = View.cliente_listar()
-        if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
+        if len(clientes) == 0: 
+            st.write("Nenhum cliente cadastrado")
         else:
             list_dic = []
-            for obj in clientes: list_dic.append(obj.to_json())
+            for obj in clientes: 
+                list_dic.append(obj.to_json())
             df = pd.DataFrame(list_dic)
             st.dataframe(df)
 
     def inserir():
-        nome = st.text_input("Informe o nome")
-        email = st.text_input("Informe o e-mail")
-        fone = st.text_input("Informe o fone")
-        senha = st.text_input("Informe a senha", type="password")
-        if st.button("Inserir"):
+        nome = st.text_input("Informe o nome", key="inserir_nome")
+        email = st.text_input("Informe o e-mail", key="inserir_email")
+        fone = st.text_input("Informe o fone", key="inserir_fone")
+        senha = st.text_input("Informe a senha", type="password", key="inserir_senha")
+        observacoes = st.text_area("Observações (Ex: alergias, necessidades especiais)", key="inserir_observacoes")
+        
+        if st.button("Inserir", key="inserir_botao"):
             try:
-                View.cliente_inserir(nome, email, fone, senha)
+                View.cliente_inserir(nome, email, fone, senha, observacoes)
                 st.success("Cliente inserido com sucesso")
                 time.sleep(2)
                 st.rerun()
@@ -38,17 +42,64 @@ class ManterClienteUI:
 
     def atualizar():
         clientes = View.cliente_listar()
-        if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
+        if len(clientes) == 0: 
+            st.write("Nenhum cliente cadastrado")
         else:
-            op = st.selectbox("Atualização de Clientes", clientes)
-            nome = st.text_input("Novo nome", op.get_nome())
-            email = st.text_input("Novo e-mail", op.get_email())
-            fone = st.text_input("Novo fone", op.get_fone())
-            senha = st.text_input("Nova senha", op.get_senha(), type="password")
-            if st.button("Atualizar"):
+            # Usar session_state para controlar o cliente selecionado
+            if 'cliente_selecionado' not in st.session_state:
+                st.session_state.cliente_selecionado = clientes[0].get_id()
+            
+            op_selecionado = st.selectbox(
+                "Atualização de Clientes", 
+                clientes,
+                key="atualizar_select",
+                format_func=lambda x: f"{x.get_id()} - {x.get_nome()} | {x.get_email()}",
+                index=next((i for i, c in enumerate(clientes) if c.get_id() == st.session_state.cliente_selecionado), 0)
+            )
+            
+            # Atualizar o session_state quando o selectbox mudar
+            if op_selecionado.get_id() != st.session_state.cliente_selecionado:
+                st.session_state.cliente_selecionado = op_selecionado.get_id()
+                st.rerun()
+            
+            # Agora usar chaves baseadas no ID do cliente selecionado
+            cliente_id = st.session_state.cliente_selecionado
+            
+            nome = st.text_input(
+                "Novo nome", 
+                value=op_selecionado.get_nome(), 
+                key=f"atualizar_nome_{cliente_id}"
+            )
+            email = st.text_input(
+                "Novo e-mail", 
+                value=op_selecionado.get_email(), 
+                key=f"atualizar_email_{cliente_id}"
+            )
+            fone = st.text_input(
+                "Novo fone", 
+                value=op_selecionado.get_fone(), 
+                key=f"atualizar_fone_{cliente_id}"
+            )
+            senha = st.text_input(
+                "Nova senha", 
+                value=op_selecionado.get_senha(), 
+                type="password", 
+                key=f"atualizar_senha_{cliente_id}"
+            )
+            
+            observacoes_value = op_selecionado.get_observacoes() or ""
+            observacoes = st.text_area(
+                "Observações (Ex: alergias, necessidades especiais)", 
+                value=observacoes_value,
+                key=f"atualizar_observacoes_{cliente_id}"
+            )
+            
+            if st.button("Atualizar", key=f"atualizar_botao_{cliente_id}"):
                 try:
-                    id = op.get_id()
-                    View.cliente_atualizar(id, nome, email, fone, senha)
+                    View.cliente_atualizar(
+                        op_selecionado.get_id(), 
+                        nome, email, fone, senha, observacoes
+                    )
                     st.success("Cliente atualizado com sucesso")
                     time.sleep(2)
                     st.rerun()
@@ -57,10 +108,11 @@ class ManterClienteUI:
 
     def excluir():
         clientes = View.cliente_listar()
-        if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
+        if len(clientes) == 0: 
+            st.write("Nenhum cliente cadastrado")
         else:
-            op = st.selectbox("Exclusão de Clientes", clientes)
-            if st.button("Excluir"):
+            op = st.selectbox("Exclusão de Clientes", clientes, key="excluir_select")
+            if st.button("Excluir", key="excluir_botao"):
                 try:
                     id = op.get_id()
                     View.cliente_excluir(id)

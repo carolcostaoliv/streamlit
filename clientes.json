@@ -24,14 +24,6 @@
         "observacoes": ""
     },
     {
-        "id": 8,
-        "nome": "Fernanda",
-        "email": "fernanda@",
-        "fone": "7865213",
-        "senha": "1234",
-        "observacoes": ""
-    },
-    {
         "id": 5,
         "nome": "Alessandra",
         "email": "alessandra@",
@@ -62,5 +54,21 @@
         "fone": "8765326",
         "senha": "heitor",
         "observacoes": "TDAH"
+    },
+    {
+        "id": 12,
+        "nome": "augusto",
+        "email": "augusto@",
+        "fone": "79422",
+        "senha": "augusto",
+        "observacoes": "alergia a dipirona"
+    },
+    {
+        "id": 8,
+        "nome": "Fernanda",
+        "email": "fernanda@",
+        "fone": "7865213",
+        "senha": "1234",
+        "observacoes": ""
     }
 ]

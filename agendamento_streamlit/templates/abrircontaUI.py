@@ -5,13 +5,13 @@ import time
 class AbrirContaUI:
     def main():
         st.header("Abrir Conta no Sistema")
-        nome = st.text_input("Informe o nome")
-        email = st.text_input("Informe o e-mail")
-        fone = st.text_input("Informe o fone")
-        senha = st.text_input("Informe a senha", type="password")
-        observacoes = st.text_area("Observações (Ex: alergias, necessidades especiais)")
+        nome = st.text_input("Informe o nome", key="abrir_conta_nome")
+        email = st.text_input("Informe o e-mail", key="abrir_conta_email")
+        fone = st.text_input("Informe o fone", key="abrir_conta_fone")
+        senha = st.text_input("Informe a senha", type="password", key="abrir_conta_senha")
+        observacoes = st.text_area("Observações (Ex: alergias, necessidades especiais)", key="abrir_conta_observacoes")
 
-        if st.button("Inserir"):
+        if st.button("Inserir", key="abrir_conta_botao"):
             try:
                 View.cliente_inserir(nome, email, fone, senha, observacoes)
                 
