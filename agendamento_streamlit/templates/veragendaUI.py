@@ -18,10 +18,12 @@ class VerAgendaUI:
             
         lista_formatada = []
         for h in horarioss:
+            cliente_obs = "---"
             cliente_nome = "Disponível"
             if h.get_id_cliente() is not None and h.get_id_cliente() != 0:
                 cliente = View.cliente_listar_id(h.get_id_cliente())
                 if cliente:
+                    cliente_obs = cliente.get_observacoes() or "---"
                     cliente_nome = cliente.get_nome()
             
             servico_nome = "Nenhum"
@@ -35,6 +37,7 @@ class VerAgendaUI:
                 "Status": h.get_confirmado(), 
                 "Cliente": cliente_nome, 
                 "Serviço": servico_nome,
+                "Observações": cliente_obs,
             })
             
         if len(lista_formatada) > 0:

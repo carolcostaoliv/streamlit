@@ -1,5 +1,6 @@
 import json
 from models.dao import DAO
+import json
 
 class Profissional:
 
@@ -59,22 +60,22 @@ class Profissional:
     def from_json(dic):
         return Profissional(dic["id"], dic["nome"], dic["especialidade"], dic["conselho"], dic["email"], dic["senha"])
 
-import json
-
-class ProfissionalDAO(DAO):
+class ProfissionalDAO(DAO):  
     @classmethod
     def abrir(cls):
-        cls.__objetos = []
+        cls._objetos = [] 
         try: 
             with open("Profissional.json", mode="r") as arquivo: 
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Profissional.from_json(dic)
-                    cls.__objetos.append(obj)
+                    cls._objetos.append(obj)
         except FileNotFoundError:
+            pass
+        except json.JSONDecodeError:
             pass
 
     @classmethod
     def salvar(cls):
         with open("Profissional.json", mode="w") as arquivo:
-            json.dump(cls.__objetos, arquivo, default = Profissional.to_json)
+            json.dump(cls._objetos, arquivo, default = Profissional.to_json, indent=4)

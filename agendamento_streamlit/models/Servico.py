@@ -15,19 +15,21 @@ class Servico:
         return self.__id
     
     def set_descricao(self, descricao):
-        if id == ' ': raise ValueError('Descrição inválida')
+        if not descricao or descricao.strip() == "": 
+            raise ValueError('Descrição inválida')
         self.__descricao = descricao
     def get_descricao(self):
         return self.__descricao
 
     def set_valor(self, valor):
-        if valor == 0: raise ValueError('Valor inválido')
+        if valor < 0: 
+            raise ValueError('Valor inválido')
         self.__valor = valor
     def get_valor(self):
         return self.__valor
     
     def __str__(self):
-        return f'ID - {self.__id} | DESCRIÇÃO - {self.__descricao} | VALOR - {self.__valor}'
+        return f'ID - {self.__id} | DESCRIÇÃO - {self.__descricao} | VALOR - R${self.__valor:.2f}'
     
     def to_json(self):
         dic = {
@@ -46,20 +48,22 @@ class Servico:
         )
     
 
-class ServicoDAO(DAO):
+class ServicoDAO(DAO):   
     @classmethod
     def abrir(cls):
-        cls.__objetos = []
+        cls._objetos = []
         try:
             with open("servico.json", mode="r") as arquivo:
                 list_dic = json.load(arquivo)
                 for dic in list_dic:
                     obj = Servico.from_json(dic)
-                    cls.__objetos.append(obj)
+                    cls._objetos.append(obj)
         except FileNotFoundError:
+            pass
+        except json.JSONDecodeError: 
             pass
     
     @classmethod
     def salvar(cls):
         with open("servico.json", mode="w") as arquivo:
-            json.dump(cls.__objetos, arquivo, default = Servico.to_json)
+            json.dump(cls._objetos, arquivo, default = Servico.to_json, indent=4)
